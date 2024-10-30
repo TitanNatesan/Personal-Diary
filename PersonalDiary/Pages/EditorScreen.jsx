@@ -1,23 +1,46 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import {
+  SafeAreaView,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from 'react-native';
+import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
 
 const EditorScreen = () => {
+
+  const [pageContent,setPageContent] = useState('');
+
+  console.log("component Rendered");
+  const editor = useEditorBridge({
+    autofocus: true,
+    avoidIosKeyboard: true,
+    pageContent: pageContent,
+  });
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hi</Text>
-    </View>
+    <SafeAreaView style={exampleStyles.fullScreen}>
+      <RichText editor={editor}/>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={exampleStyles.keyboardAvoidingView}
+      >
+        <Toolbar editor={editor} />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
+const exampleStyles = StyleSheet.create({
+  fullScreen: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    margin:10,
   },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  keyboardAvoidingView: {
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
   },
 });
 
